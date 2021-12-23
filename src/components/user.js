@@ -3,6 +3,7 @@ import { getApiClient } from '../module/axios'
 
 const UserForm = () => {
   const [value, setValue] = useState({})
+  const [users, setUsers] = useState([])
 
   const handleChange = (fieldname) => (e) => {
     setValue((prevValue) => ({ ...prevValue, [fieldname]: e.target.value }))
@@ -14,21 +15,26 @@ const UserForm = () => {
       .post('/user/add-user', value)
       .then((res) => {
         console.log(res)
+        fetchUsers()
       })
       .catch((e) => {
         console.log(e)
       })
   }
 
-  useEffect(() => {
+  const fetchUsers = () => {
     getApiClient()
       .get('/user/getall')
       .then((res) => {
         console.log(res)
+        setUsers(res.data.users)
       })
       .catch((e) => console.log(e))
+  }
+
+  useEffect(() => {
     // console.log('value', value)
-  },[value])
+  }, [value])
   return (
     <form>
       <ul>
